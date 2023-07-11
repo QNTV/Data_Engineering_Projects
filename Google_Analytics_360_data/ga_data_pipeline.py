@@ -93,5 +93,37 @@ def write_to_bq(df: pd.DataFrame) -> None:
     df['fullVisitorId'] = df.fullVisitorId.astype(str)
     
     df.to_gbq(
-        
+        destination_table = f"{DATASET}.{GA_TABLE_RAW}",
+        project_id = PROJECT,
+        credential = gcp_credentials_block.get_credentials_from_service_account,
+        cunksize = 500_000,
+        if_exists = "replace",
+    )            
+    return True
+
+@flow(log_prints = True)
+def ga_data_flow():
+    """General function of DAG orchestrates task
+        Args:
+            None.
+            
+        Returns:
+            None.
+    """
+    
+    df = read_from_bp()
+    path = write_to_gcs(df)
+    patch = f'GA_STORAGE}/{patch}'
+    df = extract_from_gcs(path)
+    write_to_bq(df)
+    
+    #Run dbt job which processing raw date to mart data
+    result = run_dbt_cloud_job(
+        dbt_cloud_job = DbtCloudJob.load("dtc-de-dbt"),
+        targeted_retries = 3
     )
+    return result
+
+if __name__ == "__main__":
+    ga_data_flow()
+    
