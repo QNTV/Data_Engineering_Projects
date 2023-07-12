@@ -10,4 +10,3 @@ FROM
 GROUP BY
     date,
     channelGrouping
-
