@@ -3,9 +3,12 @@
 SELECT
     country,
     AVG(timeOnSite) AS avg_time_on_page
+
 FROM
     {{ source('raw', 'ga_data_raw') }}
+
 WHERE
     timeOnSite IS NOT NULL
+
 Group BY
     country
