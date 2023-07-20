@@ -15,6 +15,7 @@ GA_PARQUET_FILENAME = 'ga_data.parquet'
 GA_STORAGE = 'gs//ga_storage_dtc-project'
 gcp_credentials_block = GcpCredentials.load("dtc-de-gcp")
 
+
 @task(retries = 1, log_prints = True)
 def read_from_bp() -> pd.DataFrame:
     """Task to load dta from BQ table to pandas dataframe
@@ -76,6 +77,7 @@ def extract_from_gcs(path) -> pd.DataFrame:
     df = pd.read_parquet(path)
     return df
 
+
 @task(retries = 1, log_prints = True)
 def write_to_bq(df: pd.DataFrame) -> None:
     """
@@ -101,6 +103,7 @@ def write_to_bq(df: pd.DataFrame) -> None:
     )            
     return True
 
+
 @flow(log_prints = True)
 def ga_data_flow():
     """General function of DAG orchestrates task
@@ -123,6 +126,7 @@ def ga_data_flow():
         targeted_retries = 3
     )
     return result
+
 
 if __name__ == "__main__":
     ga_data_flow()
