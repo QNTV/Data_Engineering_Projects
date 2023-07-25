@@ -6,6 +6,7 @@ from prefect_gcp import GcpCredentials
 from prefect_dbt.cloud import DbtCloudJob
 from prefect_dbt.cloud.jobs import run_dbt_cloud_job
 
+
 LOCATION = 'europe-west3'
 PROJECT = 'dtc-project'
 DATASET = 'ga_data'
